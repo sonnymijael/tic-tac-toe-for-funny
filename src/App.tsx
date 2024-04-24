@@ -23,8 +23,18 @@ export class App extends React.Component<_, AppState> {
     }
 
     // bind updateBoard to this
+    this.restartGame = this.restartGame.bind(this)
     this.updateBoard = this.updateBoard.bind(this)
     this.checkWinner = this.checkWinner.bind(this)
+  }
+
+  // restart game
+  restartGame(): void {
+    this.setState({
+      board: Array(9).fill(''),
+      turn: GameTurns.X,
+      winner: null
+    })
   }
 
   // check if there is a winner
@@ -107,7 +117,7 @@ export class App extends React.Component<_, AppState> {
                 </h2>
 
                 <footer>
-                  <button onClick={() => this.setState({ board: Array(9).fill(''), winner: null })}>
+                  <button onClick={this.restartGame}>
                     Play again
                   </button>
                 </footer>
@@ -139,7 +149,7 @@ export class App extends React.Component<_, AppState> {
                 </header>
 
                 <footer>
-                  <button onClick={() => this.setState({ board: Array(9).fill(''), winner: null })}>
+                  <button onClick={this.restartGame}>
                     Play again
                   </button>
                 </footer>
