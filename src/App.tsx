@@ -1,7 +1,7 @@
 import React from 'react'
 import './App.css'
 // Components
-import { Square } from './components'
+import { Square } from './core/components'
 import { GameTurns } from './core/enums'
 
 interface AppState {
@@ -63,7 +63,7 @@ export class App extends React.Component<_, AppState> {
   render() {
     return (
       <main className='board'>
-        <h1> Tic tac toe </h1>
+        <h1> Tic tac toe  </h1>
         <section className='game'>
           {
             this.state.board.map((_, index) => {
@@ -97,6 +97,56 @@ export class App extends React.Component<_, AppState> {
             {GameTurns.X}
           </Square>
         </section>
+        {/* Display winner check and equals or close game */}
+        {
+          this.state.winner === null && !this.state.board.includes('') && (
+            <section className='winner'>
+              <div className='text'>
+                <h2>
+                  It's a draw!
+                </h2>
+
+                <footer>
+                  <button onClick={() => this.setState({ board: Array(9).fill(''), winner: null })}>
+                    Play again
+                  </button>
+                </footer>
+              </div>
+            </section>
+          )
+        }
+        {/* Display winner */}
+        {  
+          this.state.winner && (
+            <section className='winner'>
+              <div className='text'>
+                <h2>
+                  Player {this.state.winner} wins!
+                </h2>
+
+                <header className='win'>
+                  {
+                    this.state.winner && ( 
+                      <Square
+                        isSelected={true}
+                        updateBoard={() => {}}
+                        index={0}
+                      >
+                        {this.state.winner}
+                      </Square>
+                    )
+                  }
+                </header>
+
+                <footer>
+                  <button onClick={() => this.setState({ board: Array(9).fill(''), winner: null })}>
+                    Play again
+                  </button>
+                </footer>
+              </div>
+            </section>
+          ) 
+        }
       </main>
     )
   }
