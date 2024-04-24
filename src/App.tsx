@@ -149,7 +149,7 @@ export class App extends React.Component<_, AppState> {
                   {
                     this.state.winner && ( 
                       <Square
-                        isSelected={true}
+                        isSelected={false}
                         updateBoard={() => {}}
                         index={0}
                       >

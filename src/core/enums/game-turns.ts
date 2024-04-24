@@ -1,4 +1,4 @@
-export enum GameTurns {
-    X = 'X',
-    O = 'O'   
+export enum GameTurns {   
+    X = '❌',
+    O = '⚪'
 }
