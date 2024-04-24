@@ -3,6 +3,7 @@ import './App.css'
 // Components
 import { Square } from './core/components'
 import { GameTurns } from './core/enums'
+import confetti from 'canvas-confetti'
 
 interface AppState {
   board: string[]
@@ -26,6 +27,14 @@ export class App extends React.Component<_, AppState> {
     this.restartGame = this.restartGame.bind(this)
     this.updateBoard = this.updateBoard.bind(this)
     this.checkWinner = this.checkWinner.bind(this)
+  }
+
+  // when the game start or restart select the aleatory player for start the game
+  componentDidMount() {
+    const random = Math.floor(Math.random() * 2)
+    this.setState({
+      turn: random === 0 ? GameTurns.X : GameTurns.O
+    })
   }
 
   // restart game
@@ -67,7 +76,9 @@ export class App extends React.Component<_, AppState> {
     const board = this.state.board.map((value, i) => i === index ? this.state.turn : value)
     // Update state with new turn and board
     const winner = this.checkWinner(board)
-    this.setState({ board, turn, winner })
+    this.setState({ board, turn, winner }, () => {
+      if (winner) confetti()
+    })
   }
 
   render() {
@@ -97,14 +108,14 @@ export class App extends React.Component<_, AppState> {
             updateBoard={() => {}}
             index={0}
           > 
-            {GameTurns.O}
+            {GameTurns.X}
           </Square>
           <Square 
             isSelected={(this.state.turn === GameTurns.O)}
             updateBoard={() => {}}
             index={0}
           > 
-            {GameTurns.X}
+            {GameTurns.O}
           </Square>
         </section>
         {/* Display winner check and equals or close game */}
