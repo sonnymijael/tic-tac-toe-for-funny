@@ -7,6 +7,7 @@ import { GameTurns } from './core/enums'
 interface AppState {
   board: string[]
   turn: GameTurns
+  winner: GameTurns | null
 }
 
 interface _ {}
@@ -17,17 +18,46 @@ export class App extends React.Component<_, AppState> {
 
     this.state = {
       board: Array(9).fill(''),
-      turn: GameTurns.X
+      turn: GameTurns.X,
+      winner: null
     }
 
     // bind updateBoard to this
     this.updateBoard = this.updateBoard.bind(this)
+    this.checkWinner = this.checkWinner.bind(this)
+  }
+
+  // check if there is a winner
+  checkWinner(board: string[]): GameTurns | null {
+    const winningCombos = [
+      // horizontal
+      [0, 1, 2], [3, 4, 5], [6, 7, 8],
+      // vertical
+      [0, 3, 6], [1, 4, 7], [2, 5, 8],
+      // diagonal
+      [0, 4, 8], [2, 4, 6]
+    ]
+
+    for (const combo of winningCombos) {
+      const [a, b, c] = combo
+      if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+        // set winner to the winner value (X or O)
+        return board[a] as GameTurns
+      }
+    }
+    return null
   }
 
   updateBoard(index: number) {
+    // not update position if already filled
+    if (this.state.board[index] || this.state.winner) return
+    // New turn
     const turn = this.state.turn === GameTurns.X ? GameTurns.O : GameTurns.X
+    // New board
     const board = this.state.board.map((value, i) => i === index ? this.state.turn : value)
-    this.setState({ turn, board })
+    // Update state with new turn and board
+    const winner = this.checkWinner(board)
+    this.setState({ board, turn, winner })
   }
 
   render() {
